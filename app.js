@@ -1,13 +1,8 @@
-var express = require('express');
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-
+var express = require('express')
+var logger = require('morgan')
+var flat = require("flat")
+const { unflatten } = flat
 var app = express();
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,12 +21,14 @@ const dig = (pieces, object) => {
     throw new ReferenceError("NOT_FOUND")
   }, object)
 }
+
+
 app.get("/data*.json", function(req, res) {
   const { originalUrl } = req
   const pieces = originalUrl.match(/\/(?:[^\/\.]+)/g)
   try {
     res.type('application/json');
-    res.send(dig(pieces.map(piece => piece.slice(1)),data))
+    res.send(dig(pieces.slice(1).map(piece => piece.slice(1)), unflatten(data)))
   }
   catch(e) {
     if (e.message === "NOT_FOUND") {
@@ -44,10 +41,15 @@ app.get("/data*.json", function(req, res) {
   }
 })
 
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.post("/data*.json", function(req, res) {
+  const { originalUrl, body } = req
+  const pieces = originalUrl.match(/\/(?:[^\/\.]+)/g).slice(1).map(piece => piece.slice(1))
+  
+  const params = pieces.reverse().reduce((final, current) => ({ [current]: final }), body)
+  res.type("application/json")
+  Object.assign(data, flat(params))
+  console.log(data)
+  res.send(body)
+})
 
 module.exports = app;
