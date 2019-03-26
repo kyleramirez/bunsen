@@ -13,5 +13,4 @@ mongoose.model("DataShard", new mongoose.Schema({
   value: { type: {}, index: true }
 }))
 
-
 module.exports = mongoose
