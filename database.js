@@ -10,7 +10,7 @@ const connection = mongoose.connect(
 
 mongoose.model("DataShard", new mongoose.Schema({
   path: { type: String, unique: true },
-  value: { type: {}, index: true }
+  value: {}
 }))
 
 module.exports = mongoose
