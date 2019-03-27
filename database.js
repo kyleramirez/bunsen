@@ -7,10 +7,14 @@ const connection = mongoose.connect(
   }
 );
 
-
 mongoose.model("DataShard", new mongoose.Schema({
   path: { type: String, unique: true },
   value: {}
+}), "data_shards")
+
+mongoose.model("Rule", new mongoose.Schema({
+  path: { type: String, unique: true },
+  value: String
 }))
 
 module.exports = mongoose

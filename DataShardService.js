@@ -2,7 +2,6 @@ const database = require("./database")
 const { NotFoundError, InvalidPathError } = require("./errors")
 const { PushId } = require("./utils")
 
-
 var flat = require("flat")
 const DataShard = database.model("DataShard")
 
@@ -29,6 +28,11 @@ class DataShardService {
   constructor(location) {
     this.location = location
     this.bulkWrites = []
+    this.afterCommitHooks = []
+  }
+
+  afterCommit(hook) {
+    this.afterCommitHooks.push(hook)
   }
 
   stageDeleteMany(path) {
@@ -86,11 +90,14 @@ class DataShardService {
   }
 
   async commit() {
+    let results = true
     if (this.bulkWrites.length) {
       /* Time to handle errors */
-      return await DataShard.bulkWrite(this.bulkWrites)
+      results = await DataShard.bulkWrite(this.bulkWrites)
     }
-    return true
+    return this.afterCommitHooks.reduce((prev, next) => {
+      return prev.then(next)
+    }, Promise.resolve(results))
   }
 
   async get() {
@@ -114,59 +121,65 @@ class DataShardService {
     return flat.unflatten(unassembled, { object: true })
   }
 
-  async put(data) {
+  put(data) {
     const pathParts = splitPath(this.location)
     this.stageDeleteMany(new RegExp(`^${pathParts.length ? pathParts.join("\\.") : ".*"}(?:\\.|$)`))
     const params = convertPathAndParamsToObject(pathParts, data)
     this.stageWrites(params)
-    await this.commit()
-    const results = this.bulkWrites
-    if (results.length === 1 && results[0].insertOne.document.path === pathParts.join(".")) {
-      return results[0].insertOne.document.value
-    }
-    const keyReplacer = `${pathParts.join(".")}.`
-    const unassembled = results.reduce((final, { insertOne }) =>  {
-      const { path, value } = insertOne.document
-      const key = pathParts.length ? path.replace(keyReplacer, "") : path
-      final[key] = value
-      return final
-    }, {})
-    return flat.unflatten(unassembled, { object: true })
+    this.afterCommit(() => {
+      const results = this.bulkWrites
+      if (results.length === 1 && results[0].insertOne.document.path === pathParts.join(".")) {
+        return results[0].insertOne.document.value
+      }
+      const keyReplacer = `${pathParts.join(".")}.`
+      const unassembled = results.reduce((final, { insertOne }) =>  {
+        if (insertOne) {
+          const { path, value } = insertOne.document
+          const key = pathParts.length ? path.replace(keyReplacer, "") : path
+          final[key] = value
+        }
+        return final
+      }, {})
+      return flat.unflatten(unassembled, { object: true })
+    })
+    return this
   }
 
-  async push(data) {
+  push(data) {
     const pathParts = splitPath(this.location)
     const name = new PushId().toString()
     const dataAtLocation = { [name]: data }
     const dataToWrite = convertPathAndParamsToObject(pathParts, dataAtLocation)
     this.stageWrites(dataToWrite)
-    await this.commit()
-    return { name }
+    this.afterCommit(() => ({ name }))
+    return this
   }
 
-  async patch(data) {
+  patch(data) {
     const pathParts = splitPath(this.location)
     const dataToWrite = convertPathAndParamsToObject(pathParts, data)
     this.stageWrite(dataToWrite)
-    await this.commit()
-    const results = this.bulkWrites
-    if (results.length === 1 && results[0].updateOne.update.path === pathParts.join(".")) {
-      return results[0].updateOne.update.value
-    }
-    const keyReplacer = `${pathParts.join(".")}.`
-    const unassembled = results.reduce((final, { updateOne }) =>  {
-      const { path, value } = updateOne.update
-      const key = pathParts.length ? path.replace(keyReplacer, "") : path
-      final[key] = value
-      return final
-    }, {})
-    return flat.unflatten(unassembled, { object: true })
+    this.afterCommit(() => {
+      const results = this.bulkWrites
+      if (results.length === 1 && results[0].updateOne.update.path === pathParts.join(".")) {
+        return results[0].updateOne.update.value
+      }
+      const keyReplacer = `${pathParts.join(".")}.`
+      const unassembled = results.reduce((final, { updateOne }) =>  {
+        const { path, value } = updateOne.update
+        const key = pathParts.length ? path.replace(keyReplacer, "") : path
+        final[key] = value
+        return final
+      }, {})
+      return flat.unflatten(unassembled, { object: true })
+    })
+    return this
   }
 
-  async delete() {
+  delete() {
     const pathParts = splitPath(this.location)
     this.stageDeleteMany(new RegExp(`^${pathParts.length ? pathParts.join("\\.") : ".*"}(?:\\.|$)`))
-    await this.commit()
+    return this
   }
 }
 
