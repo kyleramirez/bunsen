@@ -3,11 +3,13 @@ const logger = require("morgan")
 const DataShardService = require("./DataShardService")
 const RuleService = require("./RuleService")
 const { catchThis } = require("./utils")
+const path = require('path')
 
 const app = express()
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, "public")))
 
 app.get("/rules.json", async function(req, res) {
   const [err, data] = await catchThis((new RuleService()).get())

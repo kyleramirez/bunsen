@@ -32,3 +32,18 @@ exports.RulesNotPresentError = class RulesNotPresentError extends Error {
     }
   }
 }
+
+exports.RulesNotJSONError = class RulesNotJSONError extends Error {
+  constructor(position) {
+    super()
+    this.httpStatus = 422
+    this.position = position
+  }
+
+  toJSON() {
+    return {
+      position: this.position,
+      message: 'Rules need to be in JSON format.'
+    }
+  }
+}

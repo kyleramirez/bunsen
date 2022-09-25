@@ -1,13 +1,82 @@
 <html>
-
-<head>
-  <title>Express</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-</head>
-
-<body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
-</body>
-
+  <head>
+    <title>Express</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+      .caret {
+        color: red;
+        position: absolute;
+        background: mediumaquamarine;
+        line-height: 8px;
+      }
+      .caret:before {
+        content: "▲";
+      }
+      pre {
+        position: relative;
+        line-height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const rules = {"rules":{".read":{"rule":"false","position":{"line":2,"column":12}},".write":{"rule":"false","position":{"line":3,"column":13}},"organizations":{"$organization_id":{"profile":{".read":{"rule":"auth !== null","position":{"line":91,"column":18}},"$user_id":{".write":{"rule":"$user_id === auth.token.real_user_id","position":{"line":93,"column":21}}}},"sessions":{".read":{"rule":"auth.token.o[$organization_id] === true","position":{"line":100,"column":20}},".indexOn":{"rule":"online_now","position":{"line":101,"column":21}},"$user_id":{".read":{"rule":"$user_id === auth.uid","position":{"line":2,"column":12}},".write":{"rule":"$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())","position":{"line":3,"column":13}}}},"messages":{".read":{"rule":"auth.token.o[$organization_id] === true","position":{"line":21,"column":18}},"$conversation_id":{".read":{"rule":"root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists()","position":{"line":33,"column":18}},".write":{"rule":"root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists() || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())","position":{"line":34,"column":19}},".indexOn":{"0":{"rule":"created_at","position":{"line":24,"column":13}},"1":{"rule":"updated_at","position":{"line":28,"column":20}},"2":{"rule":"read","position":{"line":29,"column":21}}}}},"sequences":{".read":{"rule":"(auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())","position":{"line":97,"column":18}},"$user_id":{".write":{"rule":"$user_id === auth.uid","position":{"line":98,"column":21}}}},"organization":{".read":{"rule":"auth !== null","position":{"line":36,"column":21}},".write":{"rule":"false","position":{"line":39,"column":21}},"themeColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":57,"column":21}}},"buttonColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":63,"column":21}}},"chatSendColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":87,"column":21}}},"chatJewelColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":75,"column":21}}},"chatNewChatCTA":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":51,"column":21}}},"themeBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":54,"column":21}}},"buttonBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":60,"column":21}}},"chatMessageColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":81,"column":21}}},"chatSendBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":85,"column":18}}},"chatJewelBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":72,"column":21}}},"chatMessageBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":78,"column":21}}},"chatWelcomeHeaderColor":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":69,"column":21}}},"chatWelcomeHeaderMessage":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":48,"column":21}}},"chatWelcomeHeaderBackground":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":66,"column":21}}},"chatWelcomeHeaderGreetingUser":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":45,"column":21}}},"chatWelcomeHeaderGreetingDefault":{".write":{"rule":"auth.token.o[$organization_id] === true","position":{"line":42,"column":21}}}},"conversations":{".read":{"rule":"auth.token.o[$organization_id] === true","position":{"line":7,"column":18}},"$conversation_id":{".read":{"rule":"data.child('members').child(auth.uid).exists()","position":{"line":9,"column":20}},".write":{"rule":"((data.exists() && data.child('members').child(auth.uid).exists()) || newData.child('members').child(auth.uid).exists()) || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())","position":{"line":10,"column":21}}}},"membered_conversations":{".read":{"rule":"auth.token.o[$organization_id] === true","position":{"line":14,"column":18}},"$user_id":{".read":{"rule":"$user_id === auth.uid","position":{"line":16,"column":20}},".write":{"rule":"$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())","position":{"line":17,"column":21}}}}}}},"original":"{\n  \".read\": \"false\",\n  \".write\": \"false\",\n  \"organizations\": {\n    \"$organization_id\": {\n      \"conversations\": {\n        \".read\": \"auth.token.o[$organization_id] === true\",\n        \"$conversation_id\": {\n          \".read\": \"data.child('members').child(auth.uid).exists()\",\n          \".write\": \"((data.exists() && data.child('members').child(auth.uid).exists()) || newData.child('members').child(auth.uid).exists()) || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())\"\n        }\n      },\n      \"membered_conversations\": {\n        \".read\": \"auth.token.o[$organization_id] === true\",\n        \"$user_id\": {\n          \".read\": \"$user_id === auth.uid\",\n          \".write\": \"$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())\"\n        }\n      },\n      \"messages\": {\n        \".read\": \"auth.token.o[$organization_id] === true\",\n        \"$conversation_id\": {\n          \".indexOn\": [\n            \"created_at\",\n            \"updated_at\",\n            \"read\"\n          ],\n          \".read\": \"root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists()\",\n          \".write\": \"root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists() || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())\"\n        }\n      },\n      \"organization\": {\n        \".read\": \"auth !== null\",\n        \".write\": \"false\",\n        \"chatWelcomeHeaderGreetingDefault\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatWelcomeHeaderGreetingUser\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatWelcomeHeaderMessage\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatNewChatCTA\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"themeBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"themeColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"buttonBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"buttonColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatWelcomeHeaderBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatWelcomeHeaderColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatJewelBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatJewelColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatMessageBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatMessageColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatSendBackground\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        },\n        \"chatSendColor\": {\n          \".write\": \"auth.token.o[$organization_id] === true\"\n        }\n      },\n      \"profile\": {\n        \".read\": \"auth !== null\",\n        \"$user_id\": {\n          \".write\": \"$user_id === auth.token.real_user_id\"\n        }\n      },\n      \"sequences\": {\n        \".read\": \"(auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())\",\n        \"$user_id\": {\n          \".write\": \"$user_id === auth.uid\"\n        }\n      },\n      \"sessions\": {\n        \".read\": \"auth.token.o[$organization_id] === true\",\n        \".indexOn\": \"online_now\",\n        \"$user_id\": {\n          \".read\": \"$user_id === auth.uid\",\n          \".write\": \"$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())\"\n        }\n      }\n    }\n  }\n}"}
+      const data = [
+        { "path" : ".read", "value" : "false", "position" : { "line" : 2, "column" : 12 } },
+        { "path" : ".write", "value" : "false", "position" : { "line" : 3, "column" : 13 } },
+        { "path" : "organizations/$organization_id/conversations/.read", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 7, "column" : 18 } },
+        { "path" : "organizations/$organization_id/conversations/$conversation_id/.read", "value" : "data.child('members').child(auth.uid).exists()", "position" : { "line" : 9, "column" : 20 } },
+        { "path" : "organizations/$organization_id/conversations/$conversation_id/.write", "value" : "((data.exists() && data.child('members').child(auth.uid).exists()) || newData.child('members').child(auth.uid).exists()) || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())", "position" : { "line" : 10, "column" : 21 } },
+        { "path" : "organizations/$organization_id/membered_conversations/.read", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 14, "column" : 18 } },
+        { "path" : "organizations/$organization_id/membered_conversations/$user_id/.read", "value" : "$user_id === auth.uid", "position" : { "line" : 16, "column" : 20 } },
+        { "path" : "organizations/$organization_id/membered_conversations/$user_id/.write", "value" : "$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())", "position" : { "line" : 17, "column" : 21 } },
+        { "path" : "organizations/$organization_id/messages/.read", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 21, "column" : 18 } },
+        { "path" : "organizations/$organization_id/messages/$conversation_id/.indexOn/0", "value" : "created_at", "position" : { "line" : 24, "column" : 13 } },
+        { "path" : "organizations/$organization_id/messages/$conversation_id/.indexOn/1", "value" : "updated_at", "position" : { "line" : 28, "column" : 20 } },
+        { "path" : "organizations/$organization_id/messages/$conversation_id/.indexOn/2", "value" : "read", "position" : { "line" : 29, "column" : 21 } },
+        { "path" : "organizations/$organization_id/messages/$conversation_id/.read", "value" : "root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists()", "position" : { "line" : 33, "column" : 18 } },
+        { "path" : "organizations/$organization_id/messages/$conversation_id/.write", "value" : "root.child('organizations').child($organization_id).child('conversations').child($conversation_id).child('members').child(auth.uid).exists() || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())", "position" : { "line" : 34, "column" : 19 } },
+        { "path" : "organizations/$organization_id/organization/.read", "value" : "auth !== null", "position" : { "line" : 36, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/.write", "value" : "false", "position" : { "line" : 39, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/buttonBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 60, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/buttonColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 63, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatJewelBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 72, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatJewelColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 75, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatMessageBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 78, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatMessageColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 81, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatNewChatCTA/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 51, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatSendBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 85, "column" : 18 } },
+        { "path" : "organizations/$organization_id/organization/chatSendColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 87, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatWelcomeHeaderBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 66, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatWelcomeHeaderColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 69, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatWelcomeHeaderGreetingDefault/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 42, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatWelcomeHeaderGreetingUser/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 45, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/chatWelcomeHeaderMessage/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 48, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/themeBackground/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 54, "column" : 21 } },
+        { "path" : "organizations/$organization_id/organization/themeColor/.write", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 57, "column" : 21 } },
+        { "path" : "organizations/$organization_id/profile/.read", "value" : "auth !== null", "position" : { "line" : 91, "column" : 18 } },
+        { "path" : "organizations/$organization_id/profile/$user_id/.write", "value" : "$user_id === auth.token.real_user_id", "position" : { "line" : 93, "column" : 21 } },
+        { "path" : "organizations/$organization_id/sequences/.read", "value" : "(auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())", "position" : { "line" : 97, "column" : 18 } },
+        { "path" : "organizations/$organization_id/sequences/$user_id/.write", "value" : "$user_id === auth.uid", "position" : { "line" : 98, "column" : 21 } },
+        { "path" : "organizations/$organization_id/sessions/.indexOn", "value" : "online_now", "position" : { "line" : 101, "column" : 21 } },
+        { "path" : "organizations/$organization_id/sessions/.read", "value" : "auth.token.o[$organization_id] === true", "position" : { "line" : 100, "column" : 20 } },
+        { "path" : "organizations/$organization_id/sessions/$user_id/.read", "value" : "$user_id === auth.uid", "position" : { "line" : 2, "column" : 12 } },
+        { "path" : "organizations/$organization_id/sessions/$user_id/.write", "value" : "$user_id === auth.uid || (auth.token.o[$organization_id] === true && root.child('valid_subscriptions').child(auth.token.subscriber_id).exists())", "position" : { "line" : 3, "column" : 13 } }
+      ]
+    </script>
+    <pre id="rules"><script>document.write(rules.original)</script></pre>
+    <script>
+      const pre = document.getElementById("rules")
+      const columnWidth = 7.7
+      const lineHeight = 18
+      let i
+      for (i = 0; i < data.length; i++) {
+        const { path, position: { line, column } } = data[i];
+        const caret = document.createElement("SPAN")
+        caret.className = "caret"
+        caret.setAttribute("style", `left: calc(${column} * ${columnWidth}px); top: calc(${line} * ${lineHeight}px);`)
+        pre.appendChild(caret)
+      }
+    </script>
+  </body>
 </html>

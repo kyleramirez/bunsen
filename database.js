@@ -14,7 +14,8 @@ mongoose.model("DataShard", new mongoose.Schema({
 
 mongoose.model("Rule", new mongoose.Schema({
   path: { type: String, unique: true },
-  value: String
+  value: {},
+  position: {}
 }))
 
 module.exports = mongoose
